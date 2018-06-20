@@ -2,11 +2,11 @@
  *  to control motors & servos
  *  compatible with AtTiny85
  */
-#include <Servo.h>
+#include <SoftwareServo.h> //Servo.h en timer2
 #include <VirtualWire.h>
 
-Servo leftWing; //on déclare l'aileron gauche
-Servo rightWing; //et le droit
+SoftwareServo leftWing; //on déclare l'aileron gauche
+SoftwareServo rightWing; //et le droit
 const int rx = 8;
 int rotX = 0;
 int rotY = 0;
