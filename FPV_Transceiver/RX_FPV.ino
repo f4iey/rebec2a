@@ -1,3 +1,13 @@
+
+
+// Attention à bien mettre à jour à chaque changement
+/* Comme je ne sais pas comment on met une issue, je marque ça là : Attention,
+problème avec les associations montée/descente des ailevons aninsi que l'inutilté 
+de la variable rotY
+*/
+
+
+
 /* Arduino Uno RX FPV
  *  to control motors & servos
  *  compatible with AtTiny85
