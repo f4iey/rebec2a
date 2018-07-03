@@ -6,7 +6,7 @@
 #include <RF24.h> 
 #include <Servo.h>
 RF24 rx (7, 8);
-byte adresses[] = {"0"}; //meme code couleur que pur le tx
+byte adresses[6] = {"0"}; //meme code couleur que pur le tx
 Servo leftWing; //on déclare l'aileron gauche
 Servo rightWing; //et le droit
 int angleX;
