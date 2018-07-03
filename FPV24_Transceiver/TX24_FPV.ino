@@ -6,7 +6,7 @@
 #include <SPI.h>
 #include <RF24.h>
 RF24 tx (7, 8);
-byte adresses[] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
+byte adresses[6] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
 //initialisation générale
 const int ledExpo = 9;
 int modeExpo = LOW;
