@@ -32,13 +32,28 @@ void loop() {
   }
 
      vw_wait_rx();
-     if(vw_get_message((byte*) &angleX, &taille_message)) {
+     if((vw_get_message((byte*) &angleX, &taille_message)) &&(angleY == 0)) {
       //roll
       leftWing.write(1*angleX); //on leve l'aileron gauche
       rightWing.write(-1*angleX); //et on baisse le droit
       delay(15);
       SoftwareServo::refresh();
   }
+    else if((vw_get_message((byte*) &angleX, &taille_message)) &&(angleY != 0)) {
+        if(angleX > 0) {
+            //si on vire a droite
+            leftWing.write(0); //on ne touche pas
+            rightWing.write(-1*angleY); //ceci ne change pas
+            SoftwareServo::refresh();
+        }
+        
+        else {
+            //dans le cas inverse gauche
+            rightWing.write(0); //on ne touche pas
+            leftWing.write(-1*angleY); //ceci ne change pas
+            SoftwareServo::refresh();
+        }
+    }
         
 
 }
