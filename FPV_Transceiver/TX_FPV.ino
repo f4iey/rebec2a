@@ -32,9 +32,8 @@ void loop() {
 
   x = analogRead(xPin) - x0;
   y = analogRead(yPin) - y0;
-  sw = analogRead(swPin) - sw0;
-  swState = digitalRead(swPin);
-  if(swState == HIGH) {
+  swState = analogRead(swPin) - sw0;
+  if(swState<=-300) {
     //si on presse le bouton joystick
     if(impulse == LOW) {
       digitalWrite(ledExpo, LOW); //led expo disabled
