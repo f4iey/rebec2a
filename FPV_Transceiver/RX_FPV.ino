@@ -24,8 +24,8 @@ void loop() {
   vw_wait_rx();
   if(vw_get_message((byte*) &angleY, &taille_message)) {
     //pitch
-    leftWing.write(angleY);
-    rightWing.write(angleY);
+    leftWing.write(-angleY); //inversion des commandes elevons
+    rightWing.write(-angleY); //sur les deux
     delay(15);
     SoftwareServo::refresh();
      
