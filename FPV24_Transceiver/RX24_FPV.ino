@@ -6,13 +6,12 @@
 #include <RF24.h> 
 #include <Servo.h>
 RF24 rx (7, 8);
-byte adresses[6] = {"0"}; //meme code couleur que pur le tx
+byte adresses[6] = {"0"}; //meme code couleur que pour le tx
 Servo leftWing; //on déclare l'aileron gauche
 Servo rightWing; //et le droit
 int angleX;
 int angleY;
-byte taille_message = sizeof(int);
-int rc[3] = {angleX, angleY}; //en attent de recevoir le paquet
+int rc[3] = {angleX, angleY}; //en attente de recevoir le paquet
 
 void setup() {
   leftWing.attach(9);
