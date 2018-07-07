@@ -1,25 +1,15 @@
-
-
-// Attention à bien mettre à jour à chaque changement
-/* Comme je ne sais pas comment on met une issue, je marque ça là : Attention,
-problème avec les associations montée/descente des ailevons aninsi que l'inutilté 
-de la variable rotY
-*/
-
-
-
 /* Arduino Uno RX FPV
  *  to control motors & servos
  *  compatible with AtTiny85
  */
-#include <SoftwareServo.h> //Servo.h en timer2
+#include <SoftwareServo.h> //on utilise une bibliothèque  différente de Servo.h car VirtualWire et Servo utilisent le même timer
 #include <VirtualWire.h>
-
 SoftwareServo leftWing; //on déclare l'aileron gauche
 SoftwareServo rightWing; //et le droit
 const int rx = 8;
-int rotX = 0;
-int rotY = 0;
+int angleX;
+int angleY;
+byte taille_message = sizeof(int);
 
 void setup() {
   leftWing.attach(9);
@@ -31,48 +21,39 @@ void setup() {
 }
 
 void loop() {
-  int angleX;
-  int angleY;
-  byte taille_message = sizeof(int);
   vw_wait_rx();
   if(vw_get_message((byte*) &angleY, &taille_message)) {
-     if(angleY < 0) {
-      //on descend
-      while(rotY > angleY)
-        leftWing.write(rotY);
-        rightWing.write(rotY);
-        delayMicroseconds(10);
-        rotY--;
-     }
-     else {
-     //sinon, on monte
-      while(rotY < angleY)
-        leftWing.write(rotY);
-        rightWing.write(rotY);
-        delayMicroseconds(10);
-        rotY++;
-     }
+    //pitch
+    leftWing.write(-angleY); //inversion des commandes elevons
+    rightWing.write(-angleY); //sur les deux
+    delay(15);
+    SoftwareServo::refresh();
+     
   }
 
      vw_wait_rx();
-     if(vw_get_message((byte*) &angleX, &taille_message)) {
-     if(angleX < 0) {
-      //on vire à gauche
-      while(rotX > angleX)
-        leftWing.write(rotX); //on leve l'aileron gauche
-        rightWing.write(-rotX); //et on baisse le droit
-        delayMicroseconds(10);
-        rotX--;
-     }
-     else {
-     //sinon, on vire à droite
-      while(rotX < angleX)
-        leftWing.write(-rotX); //on baisse l'aileron gauche
-        rightWing.write(rotX); // et on lève le droit
-        delayMicroseconds(10);
-        rot++;
-     }
+     if((vw_get_message((byte*) &angleX, &taille_message)) &&(angleY == 0)) {
+      //roll
+      leftWing.write(1*angleX); //on leve l'aileron gauche
+      rightWing.write(-1*angleX); //et on baisse le droit
+      delay(15);
+      SoftwareServo::refresh();
   }
+    else if((vw_get_message((byte*) &angleX, &taille_message)) &&(angleY != 0)) {
+        if(angleX > 0) {
+            //si on vire a droite
+            leftWing.write(0); //on ne touche pas
+            rightWing.write(-1*angleY); //ceci ne change pas
+            SoftwareServo::refresh();
+        }
+        
+        else {
+            //dans le cas inverse gauche
+            rightWing.write(0); //on ne touche pas
+            leftWing.write(-1*angleY); //ceci ne change pas
+            SoftwareServo::refresh();
+        }
+    }
         
 
 }
