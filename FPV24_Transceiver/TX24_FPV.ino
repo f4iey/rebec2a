@@ -10,8 +10,8 @@ byte adresses[6] = {"0"}; //fonction d'adressage: sorte de code couleur entre le
 //initialisation générale
 const int ledExpo = 9;
 int modeExpo = LOW;
-byte swState = LOW;
-int impulse = HIGH;
+int swState = 0; 
+boolean impulse = true;
 const int xPin = 3; //axe horizontal
 const int yPin = 4; //vertical
 const int swPin = 5; //bouton poussoir du joystick
@@ -43,19 +43,22 @@ void loop() {
   x = analogRead(xPin) - x0;
   y = analogRead(yPin) - y0;
   swState = analogRead(swPin) - sw0;
+  //pour utiliser le bouton joystick:
   if(swState <=-300) {
-    //si on presse le bouton joystick
-    if(impulse == LOW) {
+    /*on ne va finalement pas utiliser le bouton du joystick pour passer en mode expo: peu de fiabilité
+    constat issu de tests*/
+    if(not impulse) {
       digitalWrite(ledExpo, LOW); //led expo disabled
-      impulse = HIGH; //prochain appui, on allume
+      impulse = true; //prochain appui, on allume
     }
     else {
-    digitalWrite(ledExpo, HIGH); //on allume la led expo
-    impulse = LOW; //prochain appui: on l'éteint
+    digitalWrite(ledExpo, HIGH); //on allume la led expo: trouver un autre moyen de l'allumer en digital
+    //analogique peu fiable sur bouton
+    impulse = false; //prochain appui: on l'éteint
     }
   }
 
-  modeExpo = digitalRead(ledExpo);
+  modeExpo = digitalRead(ledExpo); //on regarde si la LED verte est allumée
   if(modeExpo == HIGH) {
     //si le mode expo est actif
     angleX = mapExp(x, 0, 1023, 0, 30); //en degrés
@@ -75,6 +78,7 @@ void loop() {
 
 /*fonction pour permettre des variations exponentielles
  * pour permettre au mode expo de fonctionner.
+ * problème de valeurs... à corriger
  */
 int mapExp(float valeur, float depart, float arrivee, float nDepart, float nArrivee) {
   nDepart = log(nDepart);
