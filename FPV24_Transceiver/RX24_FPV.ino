@@ -45,7 +45,7 @@ void loop() {
         else if(rc[0] < 0) {
             //on vire à gauche monter/descendre
             rightWing(rc[0]); //on baisse l'elevon droit
-            lefting(rc[1]); //on lève l'autre
+            leftWing(rc[1]); //on lève l'autre
         }
         
       else {
