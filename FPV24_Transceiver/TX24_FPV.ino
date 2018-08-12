@@ -24,7 +24,7 @@ int angleX, angleY; //valeurs de fin
 int buzz = 3; //pour affecter au digit 3
 
 void setup() {
-  pinMode(throttlePin, INPUT); //la gestion des gaz se fait uniquement via tx
+  pinMode(gazPin, INPUT); //la gestion des gaz se fait uniquement via tx
   //conditions initiales joystick
   pinMode(ledExpo, OUTPUT); //la led d'alerte expo
   digitalWrite(ledExpo, HIGH); /*la led expo est utilisée pour montrer que
