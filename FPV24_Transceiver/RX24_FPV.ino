@@ -9,16 +9,18 @@ RF24 rx (7, 8);
 byte adresses[6] = {"0"}; //meme code couleur que pour le tx
 Servo leftWing; //on déclare l'aileron gauche
 Servo rightWing; //et le droit
-const int npnMot = 6; //on déclare l'ensemble moteur variateur
+Servo ESC;
 /* ATTENTION:
  * la valeur gazVal doit bien être entre 0 et 255!
  */
 int angleX, angleY, gazVal; //de meme que le tx
 int rc[3] = {angleX, angleY, gazVal}; //en attente de recevoir le paquet
+vitesseBrushless(0); //on arme le brushless (procédure de démarrage)
 
 void setup() {
   leftWing.attach(9);
   rightWing.attach(10);
+  ESC.attach(6);
   //réglages radio
   rx.begin();
   rx.setChannel(115); //meme canal que rx
@@ -35,7 +37,7 @@ void loop() {
     //on met la LED en constant si on en a une
     while(rx.available()) {
       rx.read(&rc, sizeof(rc)); //on utilise les données recues pour les ailerons
-      analogWrite(npnMot, rc[2]); //variateur
+      vitesseBrushless(rc[2]); //contrôleur
         if(rc[0] > 0) {
             //on braque à droite en plus de monter/descendre
             leftWing(-1*rc[0]); //on baisse l'elevon gauche
@@ -63,4 +65,9 @@ void loop() {
     //pas de télécommande à proximité: on fait clignoter la LED à occultations    
     rx.write(&rc, sizeof(rc)); //on envoie un paquet test toutes les 750ms
     delay(750);
+}
+
+void vitesseBrushless(int gaz) {
+    int commandeEsc = map(gaz, 0, 255, 0, 180); //applique les positions de joysticks ► Servos à différentes vitesses
+    ESC.write(commandeEsc);
 }
