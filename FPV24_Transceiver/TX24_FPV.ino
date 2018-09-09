@@ -15,11 +15,12 @@ byte adresses[6] = {"0"}; //fonction d'adressage: sorte de code couleur entre le
 //initialisation générale
 const int ledExpo = 9;
 int modeExpo = LOW;
-const int xPin = A3; //axe horizontal
-const int yPin = A4; //vertical
+const int xPin = A0; //axe horizontal
+const int yPin = A1; //vertical
 const int swPin = 5; //switch digital pour le mode expo
-const int gazPin = 6; //manette des gaz
-int x0, y0, swEtat, x, y, sw, gazVal;
+const int gazPin = A4; //manette des gaz
+const int rudPin = A5; //gouverne de direction
+int x0, y0, swEtat, x, y, rudVal, gazVal;
 int angleX, angleY; //valeurs de fin
 int buzz = 3; //pour affecter au digit 3
 
@@ -91,9 +92,11 @@ void loop() {
   }
   angleY = -angleY; //on inverse le joystick vericalement
   gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
-  gazVal = map(gazVal, 0, 1023, 0, 255); //adaptation en numérique pour le NPN
+  gazVal = map(gazVal, 0, 1023, 0, 255); //adaptation en numérique
+  rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
+  rudVal = map(rudPin, 0, 1023, 0, 255);
   //codage des valeurs en radio
-  int rc[3] = {angleX, angleY, gazVal}; //on met nos valeurs a envoyer dans le meme pack
+  int rc[4] = {angleX, angleY, gazVal, rudVal}; //on met nos valeurs a envoyer dans le meme pack
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
   delayMicroseconds(500);
 }
