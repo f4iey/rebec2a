@@ -40,14 +40,14 @@ void loop() {
       vitesseBrushless(rc[2]); //contrôleur
         if(rc[0] > 0) {
             //on braque à droite en plus de monter/descendre
-            leftWing(-1*rc[0]); //on baisse l'elevon gauche
-            rightWing(rc[1]); //on leve le droit
+            leftWing.write(-1*rc[0]); //on baisse l'elevon gauche
+            rightWing.write(rc[1]); //on leve le droit
         }
         
         else if(rc[0] < 0) {
             //on vire à gauche monter/descendre
-            rightWing(rc[0]); //on baisse l'elevon droit
-            leftWing(rc[1]); //on lève l'autre
+            rightWing.write(rc[0]); //on baisse l'elevon droit
+            leftWing.write(rc[1]); //on lève l'autre
         }
         
       else {
