@@ -14,7 +14,7 @@ Servo ESC;
  * la valeur gazVal doit bien être entre 0 et 255!
  */
 int angleX, angleY, gazVal; //de meme que le tx
-int rc[3] = {angleX, angleY, gazVal}; //en attente de recevoir le paquet
+int rc[4] = {angleX, angleY, gazVal, rudVal}; //en attente de recevoir le paquet
 vitesseBrushless(0); //on arme le brushless (procédure de démarrage)
 
 void setup() {
