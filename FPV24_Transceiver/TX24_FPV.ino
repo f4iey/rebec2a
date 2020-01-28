@@ -81,16 +81,16 @@ void loop() {
   modeExpo = digitalRead(ledExpo); //on regarde si la LED verte est allumée
   if(modeExpo == HIGH) {
     //si le mode expo est actif
-    angleX = mapExp(x, 0, 1023, 0, 20); //en degrés
-    angleY = mapExp(y, 0, 1023, 0, 20);
+    angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
+    angleY = mapExp(y, 0, 1023, 0, 180);
   }
 
   else {
     //sinon on laisse les paramètres linéaires
-    angleX = map(x, 0, 1023, 0, 20); //en degrés
-    angleY = map(y, 0, 1023, 0, 20);
+    angleX = map(x, 0, 1023, 0, 180); //en degrés
+    angleY = map(y, 0, 1023, 180, 0);
   }
-  angleY = -angleY; //on inverse le joystick vericalement
+  //angleY = -angleY; //on inverse le joystick vericalement
   gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
   gazVal = map(gazVal, 0, 1023, 0, 255); //adaptation en numérique
   rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
