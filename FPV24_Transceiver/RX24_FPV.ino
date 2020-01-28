@@ -55,7 +55,7 @@ void loop() {
         leftWing.write(rc[1]);
         rightWing.write(rc[1]);
         }
-       delay(15);
+       delay(15); //attend que les servo se mettent en place
       //a tester si double elevon braqués = plus maniable ou pas
       
     }
