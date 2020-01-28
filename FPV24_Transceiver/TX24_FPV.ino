@@ -66,9 +66,9 @@ void setup() {
 }
 
 void loop() {
-  //récupération données joystick
-  x = analogRead(xPin) - x0;
-  y = analogRead(yPin) - y0;
+  //récupération données joystick: need cal?
+  x = analogRead(xPin); /*- x0*/
+  y = analogRead(yPin); /*- y0*/
   //pour utiliser le switch expo:
   if(swEtat == HIGH) {
     //si le switch est fermé
