@@ -11,7 +11,7 @@ Servo leftWing; //on déclare l'aileron gauche
 Servo rightWing; //et le droit
 Servo ESC;
 /* ATTENTION:
- * la valeur gazVal doit bien être entre 0 et 255!
+ * la valeur gazVal doit bien être entre 0 et 1023!
  */
 int angleX, angleY, gazVal; //de meme que le tx
 int rc[4] = {angleX, angleY, gazVal, rudVal}; //en attente de recevoir le paquet
@@ -68,6 +68,6 @@ void loop() {
 }
 
 void vitesseBrushless(int gaz) {
-    int commandeEsc = map(gaz, 0, 255, 0, 180); //applique les positions de joysticks ► Servos à différentes vitesses
+    int commandeEsc = map(gaz, 0, 1023, 0, 135); //applique les positions de joysticks ► Servos à différentes vitesses
     ESC.write(commandeEsc);
 }
