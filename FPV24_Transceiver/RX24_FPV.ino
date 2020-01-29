@@ -15,7 +15,6 @@ Servo ESC;
  */
 int angleX, angleY, gazVal; //de meme que le tx
 int rc[4] = {angleX, angleY, gazVal, rudVal}; //en attente de recevoir le paquet
-vitesseBrushless(0); //on arme le brushless (procédure de démarrage)
 
 void setup() {
   leftWing.attach(9);
@@ -35,6 +34,7 @@ void setup() {
 void loop() {
   if(rx.available()) {
     //on met la LED en constant si on en a une
+    vitesseBrushless(0); //on arme le brushless (procédure de démarrage)
     while(rx.available()) {
       rx.read(&rc, sizeof(rc)); //on utilise les données recues pour les ailerons
       vitesseBrushless(rc[2]); //contrôleur
