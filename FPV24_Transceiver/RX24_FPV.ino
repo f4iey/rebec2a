@@ -34,7 +34,7 @@ void setup() {
 void loop() {
   if(rx.available()) {
     //on met la LED en constant si on en a une
-    vitesseBrushless(0); //on arme le brushless (procédure de démarrage)
+    ESC.write(0); //on arme le brushless (procédure de démarrage)
     while(rx.available()) {
       rx.read(&rc, sizeof(rc)); //on utilise les données recues pour les ailerons
       vitesseBrushless(rc[2]); //contrôleur
@@ -68,6 +68,6 @@ void loop() {
 }
 
 void vitesseBrushless(int gaz) {
-    int commandeEsc = map(gaz, 0, 1023, 0, 135); //applique les positions de joysticks ► Servos à différentes vitesses
+    int commandeEsc = map(gaz, 0, 1023, 55, 135); //applique les positions de joysticks ► Servos à différentes vitesses
     ESC.write(commandeEsc);
 }
