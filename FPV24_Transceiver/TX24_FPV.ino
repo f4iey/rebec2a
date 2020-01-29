@@ -92,9 +92,7 @@ void loop() {
   }
   //angleY = -angleY; //on inverse le joystick vericalement
   gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
-  gazVal = map(gazVal, 0, 1023, 0, 255); //adaptation en numérique
   rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
-  rudVal = map(rudPin, 0, 1023, 0, 255);
   //codage des valeurs en radio
   int rc[4] = {angleX, angleY, gazVal, rudVal}; //on met nos valeurs a envoyer dans le meme pack
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
