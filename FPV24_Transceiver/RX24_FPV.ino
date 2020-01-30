@@ -27,7 +27,7 @@ void setup() {
   rx.setDataRate(RF24_250KBPS); //vitesse lente
   rx.openReadingPipe(1, adresses[0]); //on lui donne le code couleur à utiliser
   rx.openWritingPipe(adresses[0]); //on lui permet d'ecrire
-  rx.startListening(); //c'est parti
+  //rx.startListening(); //c'est parti
 
 }
 
@@ -62,9 +62,11 @@ void loop() {
     //perte de connexion: on fait clignoter la LED à éclats
      
   }
-    //pas de télécommande à proximité: on fait clignoter la LED à occultations    
+    //pas de télécommande à proximité: on fait clignoter la LED à occultations
+    rx.stopListening();
     rx.write(&rc, sizeof(rc)); //on envoie un paquet test toutes les 750ms
-    delay(750);
+    delay(250);
+    rx.startListening();
 }
 
 void vitesseBrushless(int gaz) {
