@@ -65,7 +65,7 @@ void loop() {
     //pas de télécommande à proximité: on fait clignoter la LED à occultations
     rx.stopListening();
     rx.write(&rc, sizeof(rc)); //on envoie un paquet test toutes les 750ms
-    delay(250);
+    delay(125);
     rx.startListening();
 }
 
