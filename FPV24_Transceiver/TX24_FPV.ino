@@ -5,8 +5,8 @@
  */
 #define C 523
 #define G 784
-#define G# 831
-#define D# 622
+#define GS 831
+#define DS 622
 #define F 698
 #include <SPI.h>
 #include <RF24.h>
@@ -110,7 +110,7 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax) {
       sortie = nMin;
   }
   else if(sortie > nMax) {
-      sortie = nMax
+      sortie = nMax;
   }
   sortie = round(sortie);
   return sortie;
@@ -120,22 +120,22 @@ void musique(int pitch=0) {
   //fonction de musique de démarrage    
   tone(buzz, C+pitch);
   delay(500);
-  noTone(buzz)
+  noTone(buzz);
   delay(600);
   tone(buzz, G+pitch);
   delay(500);
   noTone(buzz);
   delay(650);
-  tone(buzz, G#+pitch);
+  tone(buzz, GS+pitch);
   delay(575);
-  tone(buzz, D#+pitch);
+  tone(buzz, DS+pitch);
   delay(500);
   noTone(buzz);
 }
 
 void musiqueConnect(int pitch=0) {
   //fonction de musique de connection    
-  tone(buzz, D#+pitch);
+  tone(buzz, DS+pitch);
   delay(250);
   tone(buzz, F+pitch);
   delay(250);
