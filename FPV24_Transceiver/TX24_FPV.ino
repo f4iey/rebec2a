@@ -1,8 +1,12 @@
 /*Arduino Uno TX FPV
- * using 2.4GHz
- * 433: long range, FM mode but more interferences because only one channel
- * 2.4: Smaller antenna, multichannel so less interferences
+ * avec nRF24l01+
+ * © Jules F4IEY & Bryan
  */
+//PROTOS: à mettre dans un fichier header
+void musique(int pitch);
+void musiqueConnect(int pitch);
+int mapExp(float valeur, float min, float max, float nMin, float nMax);
+//end PROTOS 
 #define C 523
 #define G 784
 #define GS 831
@@ -14,15 +18,20 @@ RF24 tx (7, 8);
 byte adresses[6] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
 //initialisation générale
 const int ledExpo = 9;
-int modeExpo = LOW;
 const int xPin = A0; //axe horizontal
 const int yPin = A1; //vertical
 const int swPin = 5; //switch digital pour le mode expo
 const int gazPin = A4; //manette des gaz
 const int rudPin = A5; //gouverne de direction
-int x0, y0, swEtat, x, y, rudVal, gazVal;
-int angleX, angleY; //valeurs de fin
+int x0, y0, modeExpo, x, y;
 int buzz = 3; //pour affecter au digit 3
+struct Package {
+  int angleX;
+  int angleY;
+  int gazVal;
+  int rudVal;
+};
+struct Package rc;
 
 void setup() {
   pinMode(gazPin, INPUT); //la gestion des gaz se fait uniquement via tx
@@ -33,12 +42,12 @@ void setup() {
   pinMode(swPin, INPUT); //déclatartion du poussoir
   x0 = analogRead(xPin);
   y0 = analogRead(yPin);
-  swEtat = digitalRead(swPin);
   digitalWrite(ledExpo, LOW);
   //paramètres du TX
   digitalWrite(ledExpo, HIGH);
+  SPI.begin();
   tx.begin();
-  tx.setChannel(115); /*le module a 125 canaux (0-124)
+  tx.setChannel(69); /*le module a 125 canaux (0-124)
   de 2400 à 2525 MHz
   */
   tx.setPALevel(RF24_PA_MAX); //puissance tx au max
@@ -50,7 +59,7 @@ void setup() {
   est correctement allumé */
   musique(0); //c'est parti pour la SNCF!
   delay(1000);
-  while(not tx.available()) {
+  while(!(tx.available())) {
     //en attente de connexion 
     //on fait clignoter la LED expo
     digitalWrite(ledExpo, HIGH);
@@ -69,34 +78,26 @@ void loop() {
   //récupération données joystick: need cal?
   x = analogRead(xPin); /*- x0*/
   y = analogRead(yPin); /*- y0*/
+  modeExpo = digitalRead(swPin);
   //pour utiliser le switch expo:
-  if(swEtat == HIGH) {
+  if(modeExpo == HIGH) {
     //si le switch est fermé
       digitalWrite(ledExpo, HIGH); //on allume la led expo
-    }
+      rc.angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
+      rc.angleY = mapExp(y, 0, 1023, 0, 180);
+   }
     else {
-    digitalWrite(ledExpo, LOW); //on allume la led expo
+      digitalWrite(ledExpo, LOW); //on allume la led expo
+      //sinon on laisse les paramètres linéaires
+      rc.angleX = map(x, 0, 1023, 0, 180); //en degrés
+      rc.angleY = map(y, 0, 1023, 180, 0);
     }
-
-  modeExpo = digitalRead(ledExpo); //on regarde si la LED verte est allumée
-  if(modeExpo == HIGH) {
-    //si le mode expo est actif
-    angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
-    angleY = mapExp(y, 0, 1023, 0, 180);
-  }
-
-  else {
-    //sinon on laisse les paramètres linéaires
-    angleX = map(x, 0, 1023, 0, 180); //en degrés
-    angleY = map(y, 0, 1023, 180, 0);
-  }
   //angleY = -angleY; //on inverse le joystick vericalement
-  gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
-  rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
-  //codage des valeurs en radio
-  int rc[4] = {angleX, angleY, gazVal, rudVal}; //on met nos valeurs a envoyer dans le meme pack
+  rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
+  rc.rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
+  //codage des valeurs en BPSK
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
-  delayMicroseconds(500);
+  delay(15);
 }
 
 /*fonction pour permettre des variations exponentielles
