@@ -13,7 +13,7 @@ Servo ESC;
 /* ATTENTION:
  * la valeur gazVal doit bien être entre 0 et 1023!
  */
-int angleX, angleY, gazVal; //de meme que le tx
+int angleX, angleY, gazVal, rudVal; //de meme que le tx
 int rc[4] = {angleX, angleY, gazVal, rudVal}; //en attente de recevoir le paquet
 
 void setup() {
