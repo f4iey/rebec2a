@@ -113,8 +113,7 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax) {
   else if(sortie > nMax) {
       sortie = nMax;
   }
-  sortie = round(sortie);
-  return sortie;
+  return round(sortie);
 }
 
 void musique(int pitch) {
