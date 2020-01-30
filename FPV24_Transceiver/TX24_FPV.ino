@@ -120,14 +120,10 @@ void musique(int pitch) {
   //fonction de musique de démarrage    
   tone(buzz, C+pitch);
   delay(500);
-  noTone(buzz);
-  delay(600);
   tone(buzz, G+pitch);
   delay(500);
-  noTone(buzz);
-  delay(650);
   tone(buzz, GS+pitch);
-  delay(575);
+  delay(275);
   tone(buzz, DS+pitch);
   delay(500);
   noTone(buzz);
@@ -136,11 +132,11 @@ void musique(int pitch) {
 void musiqueConnect(int pitch) {
   //fonction de musique de connection    
   tone(buzz, DS+pitch);
-  delay(250);
+  delay(125);
   tone(buzz, F+pitch);
-  delay(250);
+  delay(125);
   tone(buzz, G+pitch);
   delay(250);
   noTone(buzz);
-  delay(250);
+  delay(125);
 }
