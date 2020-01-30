@@ -38,13 +38,13 @@ void loop() {
     while(rx.available()) {
       rx.read(&rc, sizeof(rc)); //on utilise les données recues pour les ailerons
       vitesseBrushless(rc[2]); //contrôleur
-        if(rc[0] >= 90) { //valeur médiane à check sur les vrais sticks
+        if(rc[0] > 90) { //valeur médiane à check sur les vrais sticks
             //on braque à droite en plus de monter/descendre
             leftWing.write(map(rc[0], 0, 180, 180, 0)); //on baisse l'elevon gauche
             rightWing.write(rc[1]); //on leve le droit
         }
         
-        else if(rc[0] < 90) {
+        else if(rc[0] < 85) {
             //on vire à gauche monter/descendre
             rightWing.write(rc[0]); //on baisse l'elevon droit
             leftWing.write(rc[1]); //on lève l'autre
