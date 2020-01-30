@@ -48,13 +48,13 @@ void setup() {
   tx.startListening(); //c'est parti
   digitalWrite(ledExpo, LOW); /*tout va bien l'utilisateur confirme que le TX
   est correctement allumé */
-  musique(); //c'est parti pour la SNCF!
+  musique(0); //c'est parti pour la SNCF!
   delay(1000);
   while(not tx.available()) {
     //en attente de connexion 
     //on fait clignoter la LED expo
     digitalWrite(ledExpo, HIGH);
-    musiqueConnect();
+    musiqueConnect(0);
     digitalWrite(ledExpo, LOW);
     delay(250);
   }
@@ -116,7 +116,7 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax) {
   return sortie;
 }
 
-void musique(int pitch=0) {
+void musique(int pitch) {
   //fonction de musique de démarrage    
   tone(buzz, C+pitch);
   delay(500);
@@ -133,7 +133,7 @@ void musique(int pitch=0) {
   noTone(buzz);
 }
 
-void musiqueConnect(int pitch=0) {
+void musiqueConnect(int pitch) {
   //fonction de musique de connection    
   tone(buzz, DS+pitch);
   delay(250);
