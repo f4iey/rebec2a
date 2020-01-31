@@ -1,8 +1,9 @@
 /*Arduino Uno TX FPV
- * avec nRF24l01+
- * © Jules F4IEY & Bryan
+ * using 2.4GHz
+ * 433: long range, FM mode but more interferences because only one channel
+ * 2.4: Smaller antenna, multichannel so less interferences
  */
-//PROTOS: à mettre dans un fichier header
+//PROTOS
 void musique(int pitch);
 void musiqueConnect(int pitch);
 int mapExp(float valeur, float min, float max, float nMin, float nMax);
@@ -15,15 +16,16 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax);
 #include <SPI.h>
 #include <RF24.h>
 RF24 tx (7, 8);
-byte adresses[6] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
+byte adresses[][6] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
 //initialisation générale
 const int ledExpo = 9;
+int modeExpo = LOW;
 const int xPin = A0; //axe horizontal
 const int yPin = A1; //vertical
 const int swPin = 5; //switch digital pour le mode expo
 const int gazPin = A4; //manette des gaz
 const int rudPin = A5; //gouverne de direction
-int x0, y0, modeExpo, x, y;
+int x0, y0, swEtat, x, y;
 int buzz = 3; //pour affecter au digit 3
 struct Package {
   int angleX;
@@ -42,6 +44,7 @@ void setup() {
   pinMode(swPin, INPUT); //déclatartion du poussoir
   x0 = analogRead(xPin);
   y0 = analogRead(yPin);
+  swEtat = digitalRead(swPin);
   digitalWrite(ledExpo, LOW);
   //paramètres du TX
   digitalWrite(ledExpo, HIGH);
@@ -54,48 +57,57 @@ void setup() {
   tx.setDataRate(RF24_250KBPS); //vitesse de transmission la plus lente pour plus de portée
   tx.openWritingPipe(adresses[0]); //on demande à l'appareil d'utiliser le code couleur souhaité
   tx.openReadingPipe(1, adresses[0]); //on lui permet d'écouter
-  tx.startListening(); //c'est parti
   digitalWrite(ledExpo, LOW); /*tout va bien l'utilisateur confirme que le TX
   est correctement allumé */
   musique(0); //c'est parti pour la SNCF!
   delay(1000);
-  while(!(tx.available())) {
-    //en attente de connexion 
+  //tentavtive de connexion
+  for(int i=0; i<3; i++) {
     //on fait clignoter la LED expo
+    if(tx.available()) break;
     digitalWrite(ledExpo, HIGH);
     musiqueConnect(0);
     digitalWrite(ledExpo, LOW);
+    if(tx.available()) break;
     delay(250);
   }
   //on émet un son pour dire qu'on est connecté
   tone(buzz, C);
+  digitalWrite(ledExpo, HIGH);
   delay(500);
   noTone(buzz);
-  tx.stopListening();
 }
 
 void loop() {
   //récupération données joystick: need cal?
   x = analogRead(xPin); /*- x0*/
   y = analogRead(yPin); /*- y0*/
-  modeExpo = digitalRead(swPin);
+  swEtat = digitalRead(swPin);
   //pour utiliser le switch expo:
-  if(modeExpo == HIGH) {
+  if(swEtat == HIGH) {
     //si le switch est fermé
       digitalWrite(ledExpo, HIGH); //on allume la led expo
-      rc.angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
-      rc.angleY = mapExp(y, 0, 1023, 0, 180);
-   }
-    else {
-      digitalWrite(ledExpo, LOW); //on allume la led expo
-      //sinon on laisse les paramètres linéaires
-      rc.angleX = map(x, 0, 1023, 0, 180); //en degrés
-      rc.angleY = map(y, 0, 1023, 180, 0);
     }
+    else {
+    digitalWrite(ledExpo, LOW); //on allume la led expo
+    }
+
+  modeExpo = swEtat; //on regarde si la LED verte est allumée
+  if(modeExpo == HIGH) {
+    //si le mode expo est actif
+    rc.angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
+    rc.angleY = mapExp(y, 0, 1023, 0, 180);
+  }
+
+  else {
+    //sinon on laisse les paramètres linéaires
+    rc.angleX = map(x, 0, 1023, 0, 180); //en degrés
+    rc.angleY = map(y, 0, 1023, 180, 0);
+  }
   //angleY = -angleY; //on inverse le joystick vericalement
   rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
   rc.rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
-  //codage des valeurs en BPSK
+  //codage des valeurs en radio
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
   delay(15);
 }
@@ -113,7 +125,8 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax) {
   else if(sortie > nMax) {
       sortie = nMax;
   }
-  return round(sortie);
+  sortie = round(sortie);
+  return sortie;
 }
 
 void musique(int pitch) {
