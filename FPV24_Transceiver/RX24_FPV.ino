@@ -6,7 +6,7 @@
 #include <RF24.h> 
 #include <Servo.h>
 RF24 rx (7, 8);
-byte adresses[6] = {"0"}; //meme code couleur que pour le tx
+byte adresses[][6] = {"0"}; //meme code couleur que pour le tx
 Servo leftWing; //on déclare l'aileron gauche
 Servo rightWing; //et le droit
 Servo ESC;
@@ -18,6 +18,7 @@ struct Package{
   int rudVal; //de meme que le tx
 };
 struct Package rc;
+
 /* ATTENTION:
  * la valeur gazVal doit bien être entre 0 et 1023!
  */
@@ -27,21 +28,24 @@ void setup() {
   rightWing.attach(10);
   ESC.attach(6);
   //réglages radio
-  SPI.begin();
+  SPI.begin;
   rx.begin();
+  Serial.begin(115200);
   rx.setChannel(69); //meme canal que rx
   rx.setPALevel(RF24_PA_MAX); //puissance max
   rx.setDataRate(RF24_250KBPS); //vitesse lente
   rx.openReadingPipe(1, adresses[0]); //on lui donne le code couleur à utiliser
   rx.openWritingPipe(adresses[0]); //on lui permet d'ecrire
-  rx.startListening();
+  //rx.startListening(); //c'est parti
+  ESC.write(0); //on arme le brushless (procédure de démarrage)
+  delay(15);
 }
 
 void loop() {
-  if(rx.available()) {
     //on met la LED en constant si on en a une
-    ESC.write(0); //on arme le brushless (procédure de démarrage)
-    delay(15);
+    rx.startListening();
+    
+   if(rx.available()) {
     while(rx.available()) {
       rx.read(&rc, sizeof(rc)); //on utilise les données recues pour les ailerons
       vitesseBrushless(rc.gazVal); //contrôleur
@@ -62,25 +66,22 @@ void loop() {
         leftWing.write(rc.angleY);
         rightWing.write(rc.angleY);
         }
+        
        delay(15); //attend que les servo se mettent en place
       //a tester si double elevon braqués = plus maniable ou pas
       
     }
     //perte de connexion: on fait clignoter la LED à éclats
-    ESC.write(45); //on coupe le moteur
-    delay(15);
-    ESC.write(15); //on fait des bips avec
-    delay(1500);
-     
-  }
+   }   
     //pas de télécommande à proximité: on fait clignoter la LED à occultations
-    rx.stopListening();
+  /*  rx.stopListening();
     rx.write(&rc, sizeof(rc)); //on envoie un paquet test toutes les 750ms
-    delay(125);
-    rx.startListening();
+    delay(750);
+    rx.startListening();*/
 }
 
 void vitesseBrushless(int gaz) {
-    int commandeEsc = map(gaz, 0, 1023, 55, 135); //applique les positions de joysticks ► Servos à différentes vitesses
+    int commandeEsc = map(gaz, 0, 1023, 55, 135);
+    Serial.println(commandeEsc);//applique les positions de joysticks ► Servos à différentes vitesses
     ESC.write(commandeEsc);
 }
