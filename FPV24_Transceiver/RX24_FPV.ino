@@ -63,7 +63,7 @@ void loop() {
         
       else {
         //pitch: on va chercher angleY dans le tableau
-        leftWing.write(rc.angleY);
+        leftWing.write(map(rc.angleY,0,180,180,0));
         rightWing.write(rc.angleY);
         }
         
