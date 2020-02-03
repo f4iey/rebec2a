@@ -51,7 +51,7 @@ void loop() {
       vitesseBrushless(rc.gazVal); //contrôleur
         if(rc.angleX > 90) { //valeur médiane à check sur les vrais sticks
             //on braque à droite en plus de monter/descendre
-            leftWing.write(map(rc.angleX, 0, 180, 180, 0)); //on baisse l'elevon gauche
+            leftWing.write(rc.angleX); //on baisse l'elevon gauche
             rightWing.write(rc.angleY); //on leve le droit
         }
         
