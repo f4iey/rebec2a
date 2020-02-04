@@ -19,7 +19,6 @@ RF24 tx (7, 8);
 byte adresses[][6] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
 //initialisation générale
 const int ledExpo = 9;
-int modeExpo = LOW;
 const int xPin = A0; //axe horizontal
 const int yPin = A1; //vertical
 const int swPin = 5; //switch digital pour le mode expo
@@ -86,24 +85,19 @@ void loop() {
   //pour utiliser le switch expo:
   if(swEtat == HIGH) {
     //si le switch est fermé
-      digitalWrite(ledExpo, HIGH); //on allume la led expo
+    //si le mode expo est actif
+    digitalWrite(ledExpo, HIGH); //on allume la led expo
+    rc.angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
+    rc.angleY = mapExp(y, 0, 1023, 0, 180);
+      
     }
     else {
     digitalWrite(ledExpo, LOW); //on allume la led expo
-    }
-
-  modeExpo = swEtat; //on regarde si la LED verte est allumée
-  if(modeExpo == HIGH) {
-    //si le mode expo est actif
-    rc.angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
-    rc.angleY = mapExp(y, 0, 1023, 0, 180);
-  }
-
-  else {
     //sinon on laisse les paramètres linéaires
     rc.angleX = map(x, 0, 1023, 0, 180); //en degrés
     rc.angleY = map(y, 0, 1023, 180, 0);
-  }
+    }
+
   //angleY = -angleY; //on inverse le joystick vericalement
   rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
   rc.rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
