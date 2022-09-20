@@ -1,6 +1,5 @@
 /*Arduino Uno TX FPV
  * using 2.4GHz
- * 433: long range, FM mode but more interferences because only one channel
  * 2.4: Smaller antenna, multichannel so less interferences
  */
 //PROTOS
@@ -21,16 +20,14 @@ byte adresses[][6] = {"0"}; //fonction d'adressage: sorte de code couleur entre 
 const int ledExpo = 9;
 const int xPin = A0; //axe horizontal
 const int yPin = A1; //vertical
-const int swPin = 5; //switch digital pour le mode expo
 const int gazPin = A4; //manette des gaz
 const int rudPin = A5; //gouverne de direction
-int x0, y0, swEtat, x, y;
+int x0, y0, x, y;
 int buzz = 3; //pour affecter au digit 3
 struct Package {
-  int angleX;
-  int angleY;
   int gazVal;
-  int rudVal;
+  //char aprs[60];
+  int steerVal;
 };
 struct Package rc;
 
@@ -43,7 +40,6 @@ void setup() {
   pinMode(swPin, INPUT); //déclatartion du poussoir
   x0 = analogRead(xPin);
   y0 = analogRead(yPin);
-  swEtat = digitalRead(swPin);
   digitalWrite(ledExpo, LOW);
   //paramètres du TX
   digitalWrite(ledExpo, HIGH);
@@ -81,46 +77,14 @@ void loop() {
   //récupération données joystick: need cal?
   x = analogRead(xPin); /*- x0*/
   y = analogRead(yPin); /*- y0*/
-  swEtat = digitalRead(swPin);
-  //pour utiliser le switch expo:
-  if(swEtat == HIGH) {
-    //si le switch est fermé
-    //si le mode expo est actif
-    digitalWrite(ledExpo, HIGH); //on allume la led expo
-    rc.angleX = mapExp(x, 0, 1023, 0, 180); //en degrés
-    rc.angleY = mapExp(y, 0, 1023, 0, 180);
-      
-    }
-    else {
-    digitalWrite(ledExpo, LOW); //on allume la led expo
-    //sinon on laisse les paramètres linéaires
-    rc.angleX = map(x, 0, 1023, 0, 180); //en degrés
-    rc.angleY = map(y, 0, 1023, 180, 0);
-    }
+  digitalWrite(ledExpo, LOW); //on allume la led expo
+  //sinon on laisse les paramètres linéaires
+  rc.steerVal = map(x, 0, 1023, 0, 180); //en degrés
 
-  //angleY = -angleY; //on inverse le joystick vericalement
   rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
-  rc.rudVal = analogRead(rudPin); //même chose pour la gouverne de direction
-  //codage des valeurs en radio
+  //écriture des données sur le port SPI
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
   delay(15);
-}
-
-/*fonction pour permettre des variations exponentielles
- * pour permettre au mode expo de fonctionner.
- * problème de valeurs... à corriger
- */
-int mapExp(float valeur, float min, float max, float nMin, float nMax) {
-  float p = nMax / exp(max);
-  float sortie = p * exp(valeur);
-  if(sortie < nMin) {
-      sortie = nMin;
-  }
-  else if(sortie > nMax) {
-      sortie = nMax;
-  }
-  sortie = round(sortie);
-  return sortie;
 }
 
 void musique(int pitch) {
