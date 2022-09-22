@@ -50,7 +50,7 @@ void setup() {
   tx.setPALevel(RF24_PA_MAX); //puissance tx au max
   tx.setDataRate(RF24_250KBPS); //vitesse de transmission la plus lente pour plus de portée
   tx.openWritingPipe(adresses[0]); //on demande à l'appareil d'utiliser le code couleur souhaité
-  tx.openReadingPipe(1, adresses[0]); //on lui permet d'écouter
+ // tx.openReadingPipe(1, adresses[0]); //on lui permet d'écouter
   digitalWrite(ledExpo, LOW); /*tout va bien l'utilisateur confirme que le TX
   est correctement allumé */
   musique(0); //c'est parti pour la SNCF!
@@ -80,7 +80,7 @@ void loop() {
   //sinon on laisse les paramètres linéaires
   rc.steerVal = map(x, 0, 1023, 0, 180); //en degrés
 
-  rc.gazVal = 255;//analogRead(gazPin); //récupération de la tension induite par la manette
+  rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
   //écriture des données sur le port SPI
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
   delay(15);
