@@ -37,7 +37,6 @@ void setup() {
   pinMode(ledExpo, OUTPUT); //la led d'alerte expo
   digitalWrite(ledExpo, HIGH); /*la led expo est utilisée pour montrer que
   * le TX est en train de s'allumer */
-  pinMode(swPin, INPUT); //déclatartion du poussoir
   x0 = analogRead(xPin);
   y0 = analogRead(yPin);
   digitalWrite(ledExpo, LOW);
@@ -81,7 +80,7 @@ void loop() {
   //sinon on laisse les paramètres linéaires
   rc.steerVal = map(x, 0, 1023, 0, 180); //en degrés
 
-  rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
+  rc.gazVal = 255;//analogRead(gazPin); //récupération de la tension induite par la manette
   //écriture des données sur le port SPI
   tx.write(&rc, sizeof(rc)); //on envoie le paquet
   delay(15);
