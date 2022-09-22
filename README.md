@@ -2,4 +2,3 @@
 
 Dépot du code source du projet *fil rouge* E5FE
 
-amog
