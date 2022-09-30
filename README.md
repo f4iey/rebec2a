@@ -19,19 +19,20 @@ Le tout pour aboutir au rêve du passionné du modélisme, d'électronique, de m
 
 |Nom     |Quantité|Prix|Commentaires|
 |--------|--------|----|------------|
-|BMS     |       1|   €|A acheter   | 
-|Chassis |       1|   €|Possédé     |
-|ESC     |       1|   €|Possédé     |
-|ESP01   |       1|   €|A acheter   |
-|FPV VTX |       1|   €|A acheter   |
-|Joystick|       1|   €|Possédé     |
-|Batterie|       1|   €|A racheter  |
-|G920    |       1|   €|Possédé     |
-|MG996   |       1|   €|Possédé     |
-|Moni ATV|       1|   €|A acheter   |
-|MPU6050 |       1|   €|Possédé     |
-|NEO6M   |       1|   €|Possédé     |
-|nRF24l01|       2|   €|Possédé     |
-|Roues   |       4|   €|Possédé     |
-|Teensy4 |       1|   €|A acheter   |
-|Arduino |       1|   €|Possédé     |
+|BMS     |       1| 10€|A acheter   | 
+|Chassis |       1|  0€|Possédé     |
+|ESC     |       1|  0€|Possédé     |
+|ESP01   |       1| 10€|A acheter   |
+|FPV VTX |       1| 20€|A acheter   |
+|Joystick|       1|  0€|Possédé     |
+|Batterie|       1| 25€|A racheter  |
+|G920    |       1|  0€|Possédé     |
+|MG996   |       1|  0€|Possédé     |
+|Moni ATV|       1| 30€|A acheter   |
+|MPU6050 |       1|  0€|Possédé     |
+|NEO6M   |       1|  0€|Possédé     |
+|nRF24l01|       2|  0€|Possédé     |
+|Roues   |       4|  0€|Possédé     |
+|Teensy4 |       1| 40€|A acheter   |
+|Arduino |       1|  0€|Possédé     |
+|Total   |--------|135€|Possédé     |
