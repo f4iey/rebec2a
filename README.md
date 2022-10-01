@@ -35,4 +35,4 @@ Le tout pour aboutir au rêve du passionné du modélisme, d'électronique, de m
 |Roues   |       4|  0€|Possédé     |
 |Teensy4 |       1| 40€|A acheter   |
 |Arduino |       1|  0€|Possédé     |
-|Total   |--------|135€|Possédé     |
+|Total   |--------|135€|            |
