@@ -19,7 +19,8 @@ Le tout pour aboutir au rêve du passionné du modélisme, d'électronique, de m
 
 |Nom     |Quantité|Prix|Commentaires|
 |--------|--------|----|------------|
-|BMS     |       1| 10€|A acheter   | 
+|BMS     |       1| 10€|A acheter   |
+|Chargeur|       1| 50€|A acheter   | 
 |Chassis |       1|  0€|Possédé     |
 |ESC     |       1|  0€|Possédé     |
 |ESP01   |       1| 10€|A acheter   |
@@ -35,4 +36,4 @@ Le tout pour aboutir au rêve du passionné du modélisme, d'électronique, de m
 |Roues   |       4|  0€|Possédé     |
 |Teensy4 |       1| 40€|A acheter   |
 |Arduino |       1|  0€|Possédé     |
-|Total   |--------|135€|            |
+|Total   |--------|185€|            |
