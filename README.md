@@ -3,11 +3,17 @@
 ## Descriptif
 
 **R**adio Controlled
+
 **E**lectric
+
 **B**ased
+
 **E**xpermientation
+
 **C**hassis for
+
 **A**utomotive
+
 **A**pplications
 
 Le but de ce porjet est de convecoir d'abord, une plateforme minimale fonctionnelle de *modélisme* (donc la voiture, son châssis, son électronique, son firmware), ainsi que la commande à distance.
