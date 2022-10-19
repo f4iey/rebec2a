@@ -1,6 +1,10 @@
 # REBEC2A: Plateforme automobile Open Source
+![rebec2a wide logo](https://media.discordapp.net/attachments/712626945023672370/1032206263574089798/rebec2a.png)
+  
 
 ## Descriptif
+
+  
 
 **R**adio Controlled
 
