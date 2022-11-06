@@ -1,6 +1,10 @@
 # REBEC2A: Plateforme automobile Open Source
+![rebec2a wide logo](https://media.discordapp.net/attachments/712626945023672370/1032206263574089798/rebec2a.png)
+  
 
 ## Descriptif
+
+  
 
 **R**adio Controlled
 
@@ -29,25 +33,3 @@ Enfin, parce que nous apportons une importance particulière à redonner à la c
 
 Le tout pour aboutir au rêve du passionné du modélisme, d'électronique, de mécanique et de bricolage: une plateforme abordable, peu onéreuse, performante, facilement réplicable et abordable par des débutants et bien sur, facilement améliorable par les plus chevronnés, le tout dans un écosystème libre et ouvert.
 
-## ROM COST BOM
-
-|Nom     |Quantité|Prix|Commentaires|
-|--------|--------|----|------------|
-|BMS     |       1| 10€|A acheter   |
-|Chargeur|       1| 50€|A acheter   | 
-|Chassis |       1|  0€|Possédé     |
-|ESC     |       1|  0€|Possédé     |
-|ESP01   |       1| 10€|A acheter   |
-|FPV VTX |       1| 20€|A acheter   |
-|Joystick|       1|  0€|Possédé     |
-|Batterie|       1| 25€|A racheter  |
-|G920    |       1|  0€|Possédé     |
-|MG996   |       1|  0€|Possédé     |
-|Moni ATV|       1| 30€|A acheter   |
-|MPU6050 |       1|  0€|Possédé     |
-|NEO6M   |       1|  0€|Possédé     |
-|nRF24l01|       2|  0€|Possédé     |
-|Roues   |       4|  0€|Possédé     |
-|Teensy4 |       1| 40€|A acheter   |
-|Arduino |       1|  0€|Possédé     |
-|Total   |--------|185€|            |
