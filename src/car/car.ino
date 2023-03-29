@@ -15,6 +15,7 @@ struct Package{
   int steerVal; //servo
 };
 struct Package rc;
+int ackData[2] = {rc.gazVal, rc.steerVal};
 
 /* ATTENTION:
  * la valeur gazVal doit bien être entre 0 et 1023!
@@ -30,6 +31,7 @@ void setup() {
   rx.setPALevel(RF24_PA_MAX); //puissance max
   rx.setDataRate(RF24_250KBPS); //vitesse lente
   rx.openReadingPipe(1, adresses[0]); //on lui donne le code couleur à utiliser
+  rx.enableAckPayload();
   //rx.openWritingPipe(adresses[0]); //on lui permet d'ecrire
   //rx.startListening(); //c'est parti
   ESC.write(0); //on arme le brushless (procédure de démarrage)
@@ -39,6 +41,7 @@ void setup() {
 void loop() {
     //on met la LED en constant si on en a une
     rx.startListening();
+    //rx.writeAckPayload(1, &ackData, sizeof(ackData)); // pre-load data
     
    if(rx.available()) {
     while(rx.available()) {
@@ -46,6 +49,11 @@ void loop() {
       vitesseBrushless(rc.gazVal); //contrôleur
       axle.write(rc.steerVal);
       delay(15); //attend que le servo se mettent en place
+      // on acquitte avec les valeurs des capteurs
+      ackData[0] = 69; //TBD RPM
+      ackData[1] = analogRead(A4); //a calibrer
+      rx.writeAckPayload(1, &ackData, sizeof(ackData)); // pre-load data
+      
       
     }
     //perte de connexion: on fait clignoter la LED à éclats
