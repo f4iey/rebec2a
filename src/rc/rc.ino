@@ -12,6 +12,7 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax);
 #define GS 831
 #define DS 622
 #define Ff 698
+#define N_DATA 2
 #include <SPI.h>
 #include <RF24.h>
 RF24 tx (9, 10);
@@ -30,7 +31,10 @@ struct Package {
   int steerVal;
 };
 struct Package rc;
-int ackData[2] = {15, 15};
+int ackData[N_DATA] = {15, 15};
+bool remote = false;
+int remoteData[N_DATA]; 
+
 
 void setup() {
   pinMode(gazPin, INPUT); //la gestion des gaz se fait uniquement via tx
@@ -54,7 +58,7 @@ void setup() {
   tx.enableAckPayload();
   tx.setRetries(5,5); //delay,count
   tx.openWritingPipe(adresses[0]); //on demande à l'appareil d'utiliser le code couleur souhaité
- // tx.openReadingPipe(1, adresses[0]); //on lui permet d'écouter
+ // tx.openReadingPipe(1, adresses[0]); //on lui permet d'écouterh
   digitalWrite(ledExpo, LOW); /*tout va bien l'utilisateur confirme que le TX
   est correctement allumé */
   musique(0); //c'est parti pour la SNCF!
@@ -82,14 +86,55 @@ void loop() {
   y = analogRead(yPin); /*- y0*/
   digitalWrite(ledExpo, LOW); //on allume la led expo
   //sinon on laisse les paramètres linéaires
-  rc.steerVal = map(x, 0, 1023, 0, 180); //en degrés
-
-  rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
+  if(!remote){
+      rc.steerVal = map(x, 0, 1023, 0, 180); //en degrés
+      rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette  
+  }
+  //remote control
+  if(Serial.available()){ //0x57 = W et 0x52 =R
+      remote = true;
+      String cmd = Serial.readStringUntil('\n');
+      cmd.trim();
+      if(cmd.startsWith("R")){
+        String ans = "R";
+        for(int i=0;i<N_DATA;i++){
+          ans += String(ackData[i]);
+          if (i<N_DATA - 1) ans += ",";
+        }
+        Serial.println(ans);
+      }
+        else if (cmd.startsWith("W")){
+          String param = cmd.substring(1);
+          param.trim();
+          if(param.length() == 0) Serial.println("F");
+          else if(param.indexOf(',') == -1){
+            //un seul param
+            int val1 = param.toInt();
+            remoteData[0] = val1;
+            Serial.println("R1");
+          }
+          else{
+            int val1 = cmd.substring(1, cmd.indexOf(',', 1)).toInt();
+            String vals2 = cmd.substring(cmd.indexOf(',', 1)+1);
+            vals2.trim();
+            int val2 = vals2.toInt();
+            remoteData[0] = val1;
+            remoteData[1] = val2;
+            Serial.println("R2");
+          }
+        }
+        else if(cmd.startsWith("X")){
+         remote = false; // deconnexion
+         Serial.println("R");
+      }
+      else Serial.println("E"); //commande inconnue
+    }
   //écriture des données sur le port SPI
   if(tx.write(&rc, sizeof(rc)) && tx.isAckPayloadAvailable()){
     //on envoie le paquet et on acquitte
     tx.read(&ackData, sizeof(ackData));
     Serial.println(ackData[0]);
+    //Serial.println(ackData[0]);
   }
   delay(15);
 }
