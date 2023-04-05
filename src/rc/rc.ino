@@ -15,7 +15,7 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax);
 #define N_DATA 2
 #include <SPI.h>
 #include <RF24.h>
-RF24 tx (9, 10);
+RF24 tx (7, 8);
 byte adresses[][6] = {"0"}; //fonction d'adressage: sorte de code couleur entre les modules
 //initialisation générale
 const int ledExpo = 9;
@@ -48,7 +48,7 @@ void setup() {
   //paramètres du TX
   digitalWrite(ledExpo, HIGH);
   SPI.begin();
-  Serial.begin(9600);
+  Serial.begin(115200);
   tx.begin();
   tx.setChannel(69); /*le module a 125 canaux (0-124)
   de 2400 à 2525 MHz
@@ -87,8 +87,12 @@ void loop() {
   digitalWrite(ledExpo, LOW); //on allume la led expo
   //sinon on laisse les paramètres linéaires
   if(!remote){
-      rc.steerVal = map(x, 0, 1023, 0, 180); //en degrés
+      rc.steerVal = 40; //map(x, 0, 1023, 20, 65); //en degrés: full gauche à full droite
       rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette  
+  }
+  else{
+    rc.gazVal = remoteData[0];
+    rc.steerVal = remoteData[1];
   }
   //remote control
   if(Serial.available()){ //0x57 = W et 0x52 =R
@@ -133,7 +137,6 @@ void loop() {
   if(tx.write(&rc, sizeof(rc)) && tx.isAckPayloadAvailable()){
     //on envoie le paquet et on acquitte
     tx.read(&ackData, sizeof(ackData));
-    Serial.println(ackData[0]);
     //Serial.println(ackData[0]);
   }
   delay(15);

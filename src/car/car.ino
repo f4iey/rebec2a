@@ -23,8 +23,10 @@ int ackData[2] = {rc.gazVal, rc.steerVal};
 
 void setup() {
   axle.attach(9);
+  axle.write(40);
   ESC.attach(6);
   //réglages radio
+  Serial.begin(9600);
   SPI.begin;
   rx.begin();
   rx.setChannel(69); //meme canal que rx
@@ -48,10 +50,11 @@ void loop() {
       rx.read(&rc, sizeof(rc)); //on utilise les données recues pour les ailerons
       vitesseBrushless(rc.gazVal); //contrôleur
       axle.write(rc.steerVal);
+      Serial.println(rc.steerVal);
       delay(15); //attend que le servo se mettent en place
       // on acquitte avec les valeurs des capteurs
-      ackData[0] = 69; //TBD RPM
-      ackData[1] = analogRead(A4); //a calibrer
+      ackData[0] = rc.gazVal; //TBD RPM
+      ackData[1] = axle.read(); //a calibrer
       rx.writeAckPayload(1, &ackData, sizeof(ackData)); // pre-load data
       
       
@@ -66,6 +69,7 @@ void loop() {
 }
 
 void vitesseBrushless(int gaz) {
-    int commandeEsc = map(gaz, 0, 1023, 55, 135);
-    ESC.write(commandeEsc);
+    int commandeEsc = map(gaz, 0, 1023, 1000, 1450);
+    ESC.writeMicroseconds(commandeEsc);
+    Serial.println(commandeEsc);
 }
