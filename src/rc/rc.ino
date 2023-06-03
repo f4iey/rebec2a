@@ -120,7 +120,7 @@ void loop() {
             remoteData[0] = val1;
             Serial.println("R1");
           }
-          else if(param.indexOf(',', param.indexOf(',')) == -1){
+          else if(param.indexOf(',', param.indexOf(',')+1) == -1){
             //deux param
             int val1 = cmd.substring(1, cmd.indexOf(',', 1)).toInt();
             String vals2 = cmd.substring(cmd.indexOf(',', 1)+1);
@@ -134,7 +134,7 @@ void loop() {
             //trois param
             int val1 = cmd.substring(1, cmd.indexOf(',', 1)).toInt();
             String vals2 = cmd.substring(cmd.indexOf(',', 1)+1);
-            String vals3 = cmd.substring(cmd.indexOf(',', cmd.indexOf(',', 1))+1);
+            String vals3 = cmd.substring(cmd.indexOf(',', cmd.indexOf(',', 1)+1)+1);
             vals2.trim();
             vals3.trim();
             int val2 = vals2.toInt();
