@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addonCore>
+  <label>Simulink Xbox Controller (XInput API)</label>
+  <version>1.1.0</version>
+  <type>zip</type>
+  <identifier>4fa63aa9-d193-4e45-9562-770df44fd733</identifier>
+  <createdBy name="Mathias Voigt"/>
+  <image>resources/screenshot.png</image>
+</addonCore>

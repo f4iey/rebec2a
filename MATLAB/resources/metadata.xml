@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addOn>
+  <identifier>4fa63aa9-d193-4e45-9562-770df44fd733</identifier>
+  <displayType>Collection</displayType>
+  <translatedDisplayType>
+    <en_US>Collection</en_US>
+    <es_ES>Collection</es_ES>
+    <es_MX>Collection</es_MX>
+    <ja_JP>コレクション</ja_JP>
+    <ko_KR>컬렉션</ko_KR>
+    <zh_CN>集合</zh_CN>
+  </translatedDisplayType>
+  <name>Simulink Xbox Controller (XInput API)</name>
+  <author>Mathias Voigt</author>
+  <version>1.1.0</version>
+  <downloadUrl>https://www.mathworks.com/matlabcentral/mlc-downloads/downloads/4fa63aa9-d193-4e45-9562-770df44fd733/0e8b6bbd-2811-48df-93ff-bb09aca41394/packages/zip?src=addons_ml_desktop_install&amp;profile_id=19454531&amp;license=586114&amp;release_family=R2022b</downloadUrl>
+  <licenseUrl>https://addons.mathworks.com/registry/v1/4fa63aa9-d193-4e45-9562-770df44fd733/1.1.0.0/-/license</licenseUrl>
+  <previewImageUrl>https://www.mathworks.com/responsive_image/160/120/0/0/0/cache/matlabcentral/mlc-downloads/downloads/4fa63aa9-d193-4e45-9562-770df44fd733/0e8b6bbd-2811-48df-93ff-bb09aca41394/images/screenshot.png</previewImageUrl>
+  <releaseNotesUrl>https://www.mathworks.com/add-ons/4fa63aa9-d193-4e45-9562-770df44fd733/0e8b6bbd-2811-48df-93ff-bb09aca41394/releaseNotes</releaseNotesUrl>
+  <installationFolder>Collections</installationFolder>
+</addOn>
