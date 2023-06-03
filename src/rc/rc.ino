@@ -12,7 +12,7 @@ int mapExp(float valeur, float min, float max, float nMin, float nMax);
 #define GS 831
 #define DS 622
 #define Ff 698
-#define N_DATA 2
+#define N_DATA 3
 #include <SPI.h>
 #include <RF24.h>
 RF24 tx (7, 8);
@@ -29,9 +29,10 @@ struct Package {
   int gazVal;
   //char aprs[60];
   int steerVal;
+  uint8_t acc; //accessory trigger
 };
 struct Package rc;
-int ackData[N_DATA] = {15, 15};
+int ackData[N_DATA] = {15, 15, 0};
 bool remote = false;
 int remoteData[N_DATA]; 
 
@@ -64,15 +65,15 @@ void setup() {
   musique(0); //c'est parti pour la SNCF!
   delay(1000);
   //tentavtive de connexion
-  for(int i=0; i<3; i++) {
-    //on fait clignoter la LED expo
-    if(tx.available()) break;
-    digitalWrite(ledExpo, HIGH);
-    musiqueConnect(0);
-    digitalWrite(ledExpo, LOW);
-    if(tx.available()) break;
-    delay(250);
-  }
+//  for(int i=0; i<3; i++) {
+//    //on fait clignoter la LED expo
+//    if(tx.available()) break;
+//    digitalWrite(ledExpo, HIGH);
+//    musiqueConnect(0);
+//    digitalWrite(ledExpo, LOW);
+//    if(tx.available()) break;
+//    delay(250);
+//  }
   //on émet un son pour dire qu'on est connecté
   tone(buzz, C);
   digitalWrite(ledExpo, HIGH);
@@ -88,11 +89,13 @@ void loop() {
   //sinon on laisse les paramètres linéaires
   if(!remote){
       rc.steerVal = 40; //map(x, 0, 1023, 20, 65); //en degrés: full gauche à full droite
-      rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette  
+      rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette
+      rc.acc = 0; //feature, les accesoires ne sont accessible qu'en remote 
   }
   else{
     rc.gazVal = remoteData[0];
     rc.steerVal = remoteData[1];
+    rc.acc = remoteData[2];
   }
   //remote control
   if(Serial.available()){ //0x57 = W et 0x52 =R
@@ -117,7 +120,8 @@ void loop() {
             remoteData[0] = val1;
             Serial.println("R1");
           }
-          else{
+          else if(param.indexOf(',', param.indexOf(',')) == -1){
+            //deux param
             int val1 = cmd.substring(1, cmd.indexOf(',', 1)).toInt();
             String vals2 = cmd.substring(cmd.indexOf(',', 1)+1);
             vals2.trim();
@@ -125,6 +129,20 @@ void loop() {
             remoteData[0] = val1;
             remoteData[1] = val2;
             Serial.println("R2");
+          }
+          else{
+            //trois param
+            int val1 = cmd.substring(1, cmd.indexOf(',', 1)).toInt();
+            String vals2 = cmd.substring(cmd.indexOf(',', 1)+1);
+            String vals3 = cmd.substring(cmd.indexOf(',', cmd.indexOf(',', 1))+1);
+            vals2.trim();
+            vals3.trim();
+            int val2 = vals2.toInt();
+            int val3 = vals3.toInt();
+            remoteData[0] = val1;
+            remoteData[1] = val2;
+            remoteData[2] = val3;
+            Serial.println("R3");
           }
         }
         else if(cmd.startsWith("X")){

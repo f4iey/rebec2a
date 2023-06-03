@@ -13,15 +13,17 @@ struct Package{
   int gazVal; //moteur
   //char aprs[60]; //trame APRSIS à envoyer
   int steerVal; //servo
+  uint8_t acc; //acessory trigger
 };
 struct Package rc;
-int ackData[2] = {rc.gazVal, rc.steerVal};
+int ackData[3] = {rc.gazVal, rc.steerVal, rc.acc};
 
 /* ATTENTION:
  * la valeur gazVal doit bien être entre 0 et 1023!
  */
 
 void setup() {
+  pinMode(3, OUTPUT);
   axle.attach(9);
   axle.write(40);
   ESC.attach(6);
@@ -51,6 +53,7 @@ void loop() {
       vitesseBrushless(rc.gazVal); //contrôleur
       axle.write(rc.steerVal);
       Serial.println(rc.steerVal);
+      setAcc(rc.acc); //activation des acessoires
       delay(15); //attend que le servo se mettent en place
       // on acquitte avec les valeurs des capteurs
       ackData[0] = rc.gazVal; //TBD RPM
@@ -72,4 +75,18 @@ void vitesseBrushless(int gaz) {
     int commandeEsc = map(gaz, 0, 1023, 1000, 1450);
     ESC.writeMicroseconds(commandeEsc);
     Serial.println(commandeEsc);
+}
+void setAcc(uint8_t mode){
+  switch(mode){
+    case 1:
+      //klaxon
+      digitalWrite(3, HIGH);
+    break;
+    case 2:
+      //phares
+    break;
+   default:
+    digitalWrite(3, LOW);
+   break;
+  }
 }
