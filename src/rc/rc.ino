@@ -87,7 +87,7 @@ void loop() {
   digitalWrite(ledExpo, LOW); //on allume la led expo
   //sinon on laisse les paramètres linéaires
   if(!remote){
-      rc.steerVal = 40; //map(x, 0, 1023, 20, 65); //en degrés: full gauche à full droite
+      rc.steerVal = 10; //map(x, 0, 1023, 20, 65); //en degrés: full gauche à full droite
       rc.gazVal = analogRead(gazPin); //récupération de la tension induite par la manette  
   }
   else{

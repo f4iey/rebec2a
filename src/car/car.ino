@@ -23,7 +23,7 @@ int ackData[2] = {rc.gazVal, rc.steerVal};
 
 void setup() {
   axle.attach(9);
-  axle.write(40);
+  axle.write(10);
   ESC.attach(6);
   //réglages radio
   Serial.begin(9600);
